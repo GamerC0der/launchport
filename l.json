@@ -1,0 +1,119 @@
+{
+  "result": [
+    {
+      "name": "ViaSat 3 EMEA",
+      "provider": "United Launch Alliance (ULA)",
+      "vehicle": "Atlas V",
+      "pad": {
+        "name": "SLC-41",
+        "location": {
+          "name": "Cape Canaveral SFS",
+          "state": "FL",
+          "statename": "Florida",
+          "country": "United States",
+          "slug": "cape-canaveral-sfs"
+        }
+      },
+      "missions": [],
+      "mission_description": null,
+      "launch_description": "A United Launch Alliance (ULA) Atlas V rocket will launch the ViaSat 3 EMEA mission on Friday, November 14, 2025 at 3:04\u202fAM (UTC).",
+      "win_open": null,
+      "t0": "2025-11-14T03:04Z",
+      "win_close": null,
+      "date": "1763089440",
+      "formatted_date": "Nov 14"
+    },
+    {
+      "name": "Starlink (6-85)",
+      "provider": "SpaceX",
+      "vehicle": "Falcon 9",
+      "pad": {
+        "name": "SLC-40",
+        "location": {
+          "name": "Cape Canaveral SFS",
+          "state": "FL",
+          "statename": "Florida",
+          "country": "United States",
+          "slug": "cape-canaveral-sfs"
+        }
+      },
+      "missions": [],
+      "mission_description": null,
+      "launch_description": "A SpaceX Falcon 9 rocket will launch the Starlink (6-85) mission on Saturday, November 15, 2025 at 3:01\u202fAM (UTC).",
+      "win_open": "2025-11-15T03:01Z",
+      "t0": null,
+      "win_close": null,
+      "date": "1763175660",
+      "formatted_date": "Nov 15"
+    },
+    {
+      "name": "Starlink (6-89)",
+      "provider": "SpaceX",
+      "vehicle": "Falcon 9",
+      "pad": {
+        "name": "LC-39A",
+        "location": {
+          "name": "Kennedy Space Center",
+          "state": "FL",
+          "statename": "Florida",
+          "country": "United States",
+          "slug": "kennedy-space-center"
+        }
+      },
+      "missions": [],
+      "mission_description": null,
+      "launch_description": "A SpaceX Falcon 9 rocket will launch the Starlink (6-89) mission on Saturday, November 15, 2025 at 3:01\u202fAM (UTC).",
+      "win_open": "2025-11-15T03:01Z",
+      "t0": null,
+      "win_close": null,
+      "date": "1763175660",
+      "formatted_date": "Nov 15"
+    },
+    {
+      "name": "VAN (HASTE)",
+      "provider": "Rocket Lab",
+      "vehicle": "Electron",
+      "pad": {
+        "name": "Rocket Lab LC-3",
+        "location": {
+          "name": "Mid-Atlantic Regional Spaceport (Wallops Island)",
+          "state": "VA",
+          "statename": "Virginia",
+          "country": "United States",
+          "slug": "mid-atlantic-regional-spaceport-wallops-island"
+        }
+      },
+      "missions": [],
+      "mission_description": null,
+      "launch_description": "A Rocket Lab Electron rocket will launch the VAN (HASTE) mission on Sunday, November 16, 2025 at 12:45\u202fPM (UTC).",
+      "win_open": null,
+      "t0": "2025-11-16T12:45Z",
+      "win_close": null,
+      "date": "1763297100",
+      "formatted_date": "Nov 16"
+    },
+    {
+      "name": "Sentinel-6B",
+      "provider": "SpaceX",
+      "vehicle": "Falcon 9",
+      "pad": {
+        "name": "SLC-4E",
+        "location": {
+          "name": "Vandenberg SFB",
+          "state": "CA",
+          "statename": "California",
+          "country": "United States",
+          "slug": "vandenberg-sfb"
+        }
+      },
+      "missions": [],
+      "mission_description": null,
+      "launch_description": "A SpaceX Falcon 9 rocket will launch the Sentinel-6B mission on Monday, November 17, 2025 at 5:21\u202fAM (UTC).",
+      "win_open": null,
+      "t0": "2025-11-17T05:21Z",
+      "win_close": null,
+      "date": "1763356860",
+      "formatted_date": "Nov 17"
+    }
+  ]
+}
