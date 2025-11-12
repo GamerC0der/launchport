@@ -5,7 +5,7 @@ function NameOf() {
 export default function Home() {
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="tab text-center text-4xl">
+      <div className="text-center text-4xl">
         LaunchPort
       </div>
     </div>
