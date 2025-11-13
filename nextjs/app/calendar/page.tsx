@@ -10,35 +10,28 @@ interface Launch {
   launch_description: string;
   formatted_date: string;
   t0: string | null;
+  date: string;
 }
 
 export default function Calendar() {
   const [selectedLaunch, setSelectedLaunch] = useState<Launch | null>(null);
   const launches = launchesData.result as Launch[];
-  const grouped = launches.reduce((acc, launch) => {
-    if (!acc[launch.formatted_date]) acc[launch.formatted_date] = [];
-    acc[launch.formatted_date].push(launch);
-    return acc;
-  }, {} as Record<string, Launch[]>);
-  const dates = Object.keys(grouped).sort((a, b) => {
-    const [mA, dA] = [a.split(' ')[0], parseInt(a.split(' ')[1])];
-    const [mB, dB] = [b.split(' ')[0], parseInt(b.split(' ')[1])];
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    return months.indexOf(mA) - months.indexOf(mB) || dA - dB;
-  });
+  const sorted = launches.sort((a, b) => parseInt(a.date) - parseInt(b.date));
+  const now = Date.now() / 1000;
+  const latestIdx = sorted.findIndex(l => parseInt(l.date) >= now);
+  const latest = latestIdx >= 0 ? latestIdx : sorted.length - 1;
 
   return (
-    <div className="p-8">
+    <div className="p-8 overflow-y-auto h-screen">
       <h1 className="text-3xl font-bold mb-6">Launch Calendar</h1>
-      <div className="grid grid-cols-7 gap-4">
-        {dates.map((date) => (
-          <div key={date} className="border border-gray-200 dark:border-gray-800 rounded-lg p-3 min-h-[120px]">
-            <div className="font-semibold mb-2">{date}</div>
-            {grouped[date].map((launch, idx) => (
-              <div key={idx} onClick={() => setSelectedLaunch(launch)} className="text-sm p-2 mb-1 bg-blue-100 dark:bg-blue-900 rounded cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-800">
-                {launch.name}
-              </div>
-            ))}
+      <div className="flex flex-col items-center gap-4">
+        {sorted.map((launch, idx) => (
+          <div key={idx} className={`w-full max-w-2xl border border-gray-200 dark:border-gray-800 rounded-lg p-4 ${idx === latest ? 'mt-[40vh]' : ''}`}>
+            <div className="font-semibold mb-2">{launch.formatted_date}</div>
+            <div onClick={() => setSelectedLaunch(launch)} className="text-sm p-2 bg-blue-100 dark:bg-blue-900 rounded cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-800">
+              <div className="font-medium">{launch.name}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">{launch.provider}</div>
+            </div>
           </div>
         ))}
       </div>
