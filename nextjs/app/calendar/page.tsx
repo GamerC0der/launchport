@@ -75,6 +75,24 @@ export default function Calendar() {
     fetchLaunches();
   }, []);
 
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedLaunch) {
+        setSelectedLaunch(null);
+      }
+    };
+    
+    if (selectedLaunch) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+    
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedLaunch]);
+
   if (loading) {
     return (
       <div className="p-8 flex justify-center items-center min-h-screen">
@@ -131,22 +149,75 @@ export default function Calendar() {
         ))}
       </div>
       {selectedLaunch && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setSelectedLaunch(null)}>
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full mx-4" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-2xl font-bold mb-4">{selectedLaunch.name}</h2>
-            <p className="mb-4">{selectedLaunch.launch_description}</p>
-            <div className="space-y-2 text-sm mb-4">
-              <div><strong>Provider:</strong> {selectedLaunch.provider}</div>
-              <div><strong>Vehicle:</strong> {selectedLaunch.vehicle}</div>
-              {selectedLaunch.pad?.name && selectedLaunch.pad.name !== 'Unknown' && (
-                <div><strong>Pad:</strong> {selectedLaunch.pad.name}</div>
-              )}
-              {selectedLaunch.pad?.location?.name && selectedLaunch.pad.location.name !== 'Unknown' && (
-                <div><strong>Location:</strong> {selectedLaunch.pad.location.name}{selectedLaunch.pad.location.state && `, ${selectedLaunch.pad.location.state}`}</div>
-              )}
-              {selectedLaunch.t0 && <div><strong>Launch Time:</strong> {new Date(selectedLaunch.t0).toLocaleString()}</div>}
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity duration-200"
+          onClick={() => setSelectedLaunch(null)}
+        >
+          <div 
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex items-start justify-between rounded-t-2xl">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white pr-4">{selectedLaunch.name}</h2>
+              <button 
+                onClick={() => setSelectedLaunch(null)}
+                className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                aria-label="Close"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
-            <button onClick={() => setSelectedLaunch(null)} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded">Close</button>
+            
+            <div className="px-6 py-6">
+              {selectedLaunch.launch_description && (
+                <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed text-lg">{selectedLaunch.launch_description}</p>
+              )}
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                  <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Provider</div>
+                  <div className="text-gray-900 dark:text-white font-medium">{selectedLaunch.provider}</div>
+                </div>
+                
+                <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                  <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Vehicle</div>
+                  <div className="text-gray-900 dark:text-white font-medium">{selectedLaunch.vehicle}</div>
+                </div>
+                
+                {selectedLaunch.pad?.name && selectedLaunch.pad.name !== 'Unknown' && (
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                    <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Launch Pad</div>
+                    <div className="text-gray-900 dark:text-white font-medium">{selectedLaunch.pad.name}</div>
+                  </div>
+                )}
+                
+                {selectedLaunch.pad?.location?.name && selectedLaunch.pad.location.name !== 'Unknown' && (
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                    <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Location</div>
+                    <div className="text-gray-900 dark:text-white font-medium">
+                      {selectedLaunch.pad.location.name}
+                      {selectedLaunch.pad.location.state && `, ${selectedLaunch.pad.location.state}`}
+                    </div>
+                  </div>
+                )}
+                
+                {selectedLaunch.formatted_date && (
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                    <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Date</div>
+                    <div className="text-gray-900 dark:text-white font-medium">{selectedLaunch.formatted_date}</div>
+                  </div>
+                )}
+                
+                {selectedLaunch.t0 && (
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                    <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Launch Time</div>
+                    <div className="text-gray-900 dark:text-white font-medium">{new Date(selectedLaunch.t0).toLocaleString()}</div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
