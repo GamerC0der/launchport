@@ -5,11 +5,19 @@ export default async function Home() {
     <div className="max-w-md w-full">
       <h1 className="text-4xl mb-6 text-center font-bold text-gray-900 dark:text-white">LaunchPort</h1>
       {launch ? <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-        <h2 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">{launch.name}</h2>
+        {launch.name && launch.name !== 'Unknown' && <h2 className="text-2xl font-bold mb-3 text-gray-900 dark:text-white">{launch.name}</h2>}
         <div className="space-y-2 text-gray-700 dark:text-gray-300">
-          <p className="text-lg">{launch.provider} • {launch.vehicle}</p>
-          <p className="text-gray-600 dark:text-gray-400">{launch.formatted_date}</p>
-          {launch.pad?.location?.name && <p className="text-sm text-gray-500 dark:text-gray-500">{launch.pad.location.name}</p>}
+          {launch.provider && launch.provider !== 'Unknown' && launch.vehicle && launch.vehicle !== 'Unknown' && (
+            <p className="text-lg">{launch.provider} • {launch.vehicle}</p>
+          )}
+          {launch.provider && launch.provider !== 'Unknown' && (!launch.vehicle || launch.vehicle === 'Unknown') && (
+            <p className="text-lg">{launch.provider}</p>
+          )}
+          {(!launch.provider || launch.provider === 'Unknown') && launch.vehicle && launch.vehicle !== 'Unknown' && (
+            <p className="text-lg">{launch.vehicle}</p>
+          )}
+          {launch.formatted_date && launch.formatted_date !== 'Unknown' && <p className="text-gray-600 dark:text-gray-400">{launch.formatted_date}</p>}
+          {launch.pad?.location?.name && launch.pad.location.name !== 'Unknown' && <p className="text-sm text-gray-500 dark:text-gray-500">{launch.pad.location.name}</p>}
         </div>
       </div> : <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700 text-center text-gray-500 dark:text-gray-400">No upcoming launches</div>}
     </div>
