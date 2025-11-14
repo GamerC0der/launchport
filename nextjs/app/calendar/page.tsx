@@ -56,8 +56,14 @@ export default function Calendar() {
           });
         };
         
-        setPastLaunches(processLaunches(pastData).reverse());
-        setNextLaunches(processLaunches(nextData));
+        const past = processLaunches(pastData).reverse().filter(
+          (l: Launch) => !l.name.includes('EscaPADE') && !l.launch_description.includes('EscaPADE')
+        );
+        const next = processLaunches(nextData).filter(
+          (l: Launch) => !l.name.includes('EscaPADE') && !l.launch_description.includes('EscaPADE')
+        );
+        setPastLaunches(past);
+        setNextLaunches(next);
       } catch (error) {
         console.error('Error fetching launches:', error);
       } finally {
