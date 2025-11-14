@@ -131,19 +131,29 @@ export default function Calendar() {
       <div className="flex flex-col items-center gap-4">
         {filteredPastLaunches.map((launch, idx) => (
           <div key={`past-${idx}`} className="w-full max-w-2xl border border-gray-200 dark:border-gray-800 rounded-lg p-4">
-            <div className="font-semibold mb-2">{launch.formatted_date}</div>
-            <div onClick={() => setSelectedLaunch(launch)} className="text-sm p-2 bg-blue-100 dark:bg-blue-900 rounded cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-800">
-              <div className="font-medium">{launch.name}</div>
-              <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">{launch.provider}</div>
+            <div className="font-semibold mb-3">{launch.formatted_date}</div>
+            <div onClick={() => setSelectedLaunch(launch)} className="text-sm p-4 bg-blue-100 dark:bg-blue-900 rounded cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-800 min-h-[60px]">
+              <div className="font-medium text-base mb-2">{launch.name}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+                {[launch.provider, launch.vehicle].filter(v => v && v !== 'Unknown').join(' • ')}
+              </div>
+              {launch.pad?.location?.name && launch.pad.location.name !== 'Unknown' && (
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-3">{launch.pad.location.name}</div>
+              )}
             </div>
           </div>
         ))}
         {filteredNextLaunches.map((launch, idx) => (
           <div key={`next-${idx}`} className="w-full max-w-2xl border border-gray-200 dark:border-gray-800 rounded-lg p-4">
-            <div className="font-semibold mb-2">{launch.formatted_date}</div>
-            <div onClick={() => setSelectedLaunch(launch)} className="text-sm p-2 bg-blue-100 dark:bg-blue-900 rounded cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-800">
-              <div className="font-medium">{launch.name}</div>
-              <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">{launch.provider}</div>
+            <div className="font-semibold mb-3">{launch.formatted_date}</div>
+            <div onClick={() => setSelectedLaunch(launch)} className="text-sm p-4 bg-blue-100 dark:bg-blue-900 rounded cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-800 min-h-[60px]">
+              <div className="font-medium text-base mb-2">{launch.name}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+                {[launch.provider, launch.vehicle].filter(v => v && v !== 'Unknown').join(' • ')}
+              </div>
+              {launch.pad?.location?.name && launch.pad.location.name !== 'Unknown' && (
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-3">{launch.pad.location.name}</div>
+              )}
             </div>
           </div>
         ))}
@@ -176,15 +186,19 @@ export default function Calendar() {
               )}
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-                  <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Provider</div>
-                  <div className="text-gray-900 dark:text-white font-medium">{selectedLaunch.provider}</div>
-                </div>
+                {selectedLaunch.provider && selectedLaunch.provider !== 'Unknown' && (
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                    <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Provider</div>
+                    <div className="text-gray-900 dark:text-white font-medium">{selectedLaunch.provider}</div>
+                  </div>
+                )}
                 
-                <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-                  <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Vehicle</div>
-                  <div className="text-gray-900 dark:text-white font-medium">{selectedLaunch.vehicle}</div>
-                </div>
+                {selectedLaunch.vehicle && selectedLaunch.vehicle !== 'Unknown' && (
+                  <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                    <div className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Vehicle</div>
+                    <div className="text-gray-900 dark:text-white font-medium">{selectedLaunch.vehicle}</div>
+                  </div>
+                )}
                 
                 {selectedLaunch.pad?.name && selectedLaunch.pad.name !== 'Unknown' && (
                   <div className="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
