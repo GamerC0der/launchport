@@ -60,7 +60,7 @@ export async function GET(request: Request) {
     if (launches.length > 0) {
       return NextResponse.json({ result: launches });
     }
-    
+  
     const fallbackLaunches = await scrapeAlternativeSource(type, limit);
     return NextResponse.json({ result: fallbackLaunches });
   } catch (error) {
