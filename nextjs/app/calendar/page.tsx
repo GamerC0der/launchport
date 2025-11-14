@@ -21,6 +21,7 @@ export default function Calendar() {
   const [pastLaunches, setPastLaunches] = useState<Launch[]>([]);
   const [nextLaunches, setNextLaunches] = useState<Launch[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     async function fetchLaunches() {
@@ -82,11 +83,35 @@ export default function Calendar() {
     );
   }
 
+  const filterLaunches = (launches: Launch[]) => {
+    if (!searchQuery.trim()) return launches;
+    const query = searchQuery.toLowerCase();
+    return launches.filter(launch => 
+      launch.name.toLowerCase().includes(query) ||
+      launch.provider.toLowerCase().includes(query) ||
+      launch.vehicle.toLowerCase().includes(query) ||
+      launch.pad?.location?.name?.toLowerCase().includes(query) ||
+      launch.launch_description?.toLowerCase().includes(query)
+    );
+  };
+
+  const filteredPastLaunches = filterLaunches(pastLaunches);
+  const filteredNextLaunches = filterLaunches(nextLaunches);
+
   return (
     <div className="p-8 overflow-y-auto h-screen">
-      <h1 className="text-3xl font-bold mb-6">Launch Calendar</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Launch Calendar</h1>
+      <div className="mb-6 flex justify-center">
+        <input
+          type="text"
+          placeholder="Search launches..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full max-w-2xl px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
       <div className="flex flex-col items-center gap-4">
-        {pastLaunches.map((launch, idx) => (
+        {filteredPastLaunches.map((launch, idx) => (
           <div key={`past-${idx}`} className="w-full max-w-2xl border border-gray-200 dark:border-gray-800 rounded-lg p-4">
             <div className="font-semibold mb-2">{launch.formatted_date}</div>
             <div onClick={() => setSelectedLaunch(launch)} className="text-sm p-2 bg-blue-100 dark:bg-blue-900 rounded cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-800">
@@ -95,7 +120,7 @@ export default function Calendar() {
             </div>
           </div>
         ))}
-        {nextLaunches.map((launch, idx) => (
+        {filteredNextLaunches.map((launch, idx) => (
           <div key={`next-${idx}`} className="w-full max-w-2xl border border-gray-200 dark:border-gray-800 rounded-lg p-4">
             <div className="font-semibold mb-2">{launch.formatted_date}</div>
             <div onClick={() => setSelectedLaunch(launch)} className="text-sm p-2 bg-blue-100 dark:bg-blue-900 rounded cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-800">
@@ -113,8 +138,12 @@ export default function Calendar() {
             <div className="space-y-2 text-sm mb-4">
               <div><strong>Provider:</strong> {selectedLaunch.provider}</div>
               <div><strong>Vehicle:</strong> {selectedLaunch.vehicle}</div>
-              <div><strong>Pad:</strong> {selectedLaunch.pad.name}</div>
-              <div><strong>Location:</strong> {selectedLaunch.pad.location.name}, {selectedLaunch.pad.location.state}</div>
+              {selectedLaunch.pad?.name && selectedLaunch.pad.name !== 'Unknown' && (
+                <div><strong>Pad:</strong> {selectedLaunch.pad.name}</div>
+              )}
+              {selectedLaunch.pad?.location?.name && selectedLaunch.pad.location.name !== 'Unknown' && (
+                <div><strong>Location:</strong> {selectedLaunch.pad.location.name}{selectedLaunch.pad.location.state && `, ${selectedLaunch.pad.location.state}`}</div>
+              )}
               {selectedLaunch.t0 && <div><strong>Launch Time:</strong> {new Date(selectedLaunch.t0).toLocaleString()}</div>}
             </div>
             <button onClick={() => setSelectedLaunch(null)} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded">Close</button>

@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default async function Home() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/launches?type=next&limit=1`, { cache: 'no-store' });
   const launch = (await res.json()).result?.[0];
@@ -20,6 +22,11 @@ export default async function Home() {
           {launch.pad?.location?.name && launch.pad.location.name !== 'Unknown' && <p className="text-sm text-gray-500 dark:text-gray-500">{launch.pad.location.name}</p>}
         </div>
       </div> : <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700 text-center text-gray-500 dark:text-gray-400">No upcoming launches</div>}
+      <div className="mt-6 text-center">
+        <Link href="/calendar" className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+          View All Launches
+        </Link>
+      </div>
     </div>
   </div>;
 }
