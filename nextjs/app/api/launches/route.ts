@@ -57,12 +57,7 @@ export async function GET(request: Request) {
 
   try {
     const launches = await scrapeSpaceflightNow(type, limit);
-    if (launches.length > 0) {
-      return NextResponse.json({ result: launches });
-    }
-  
-    const fallbackLaunches = await scrapeAlternativeSource(type, limit);
-    return NextResponse.json({ result: fallbackLaunches });
+    return NextResponse.json({ result: launches });
   } catch (error) {
     console.error('Scraping error:', error);
     return NextResponse.json({ result: [] }, { status: 500 });
@@ -389,101 +384,4 @@ async function scrapeSpaceflightNow(type: string, limit: number): Promise<Launch
     return [];
   }
 }
-
-async function scrapeAlternativeSource(type: string, limit: number): Promise<Launch[]> {
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
-    
-    const url = 'https://www.space.com/launch-calendar';
-    const response = await fetch(url, {
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
-      }
-    });
-    
-    clearTimeout(timeoutId);
-    
-    if (!response.ok) {
-      return [];
-    }
-    
-    const html = await response.text();
-    const $ = cheerio.load(html);
-    const launches: Launch[] = [];
-    const now = Date.now() / 1000;
-    
-    $('article, .launch-calendar-item, .event-item, .card, [class*="launch"], [class*="event"]').each((idx, element) => {
-      if (launches.length >= limit * 3) return false;
-      
-      const $el = $(element);
-      const allText = $el.text().trim();
-      
-      if (allText.length < 30) return;
-      
-      const title = $el.find('h2, h3, h4, .title, a, strong').first().text().trim() ||
-                   allText.split('\n')[0].trim() ||
-                   allText.match(/^([A-Z][^•\n]{5,}?)(?:\s*•|\s*\n|$)/m)?.[1]?.trim();
-      
-      const datePatterns = [
-        /([A-Z][a-z]+\s+\d{1,2},?\s+\d{4})/,
-        /(\d{1,2}\s+[A-Z][a-z]+\s+\d{4})/,
-        /(\d{1,2}\/\d{1,2}\/\d{4})/,
-        /(\d{4}-\d{2}-\d{2})/
-      ];
-      
-      let dateText = $el.find('.date, time, .launch-date, [datetime]').first().attr('datetime') ||
-                     $el.find('.date, time, .launch-date').first().text().trim();
-      
-      if (!dateText) {
-        for (const pattern of datePatterns) {
-          const match = allText.match(pattern);
-          if (match) {
-            dateText = match[1];
-            break;
-          }
-        }
-      }
-      
-      if (!title || !dateText || title.length < 5) return;
-      
-      const launchDate = parseDate(dateText);
-      if (isNaN(launchDate) || launchDate === 0) return;
-      
-      if (type === 'past' && launchDate >= now) return;
-      if (type === 'next' && launchDate < now) return;
-      
-      launches.push({
-        name: title.substring(0, 100),
-        provider: 'Unknown',
-        vehicle: 'Unknown',
-        pad: {
-          name: 'Unknown',
-          location: {
-            name: 'Unknown',
-            state: ''
-          }
-        },
-        launch_description: `Launch: ${title}`,
-        formatted_date: formatDate(dateText),
-        t0: dateText,
-        date: launchDate.toString()
-      });
-    });
-    
-    return type === 'past' 
-      ? launches.sort((a, b) => parseInt(b.date) - parseInt(a.date)).slice(0, limit)
-      : launches.sort((a, b) => parseInt(a.date) - parseInt(b.date)).slice(0, limit);
-  } catch (error: any) {
-    if (error.name === 'AbortError') {
-      console.error('Alternative scraping timeout');
-    } else {
-      console.error('Alternative scraping error:', error.message);
-    }
-    return [];
-  }
-}
-
 
