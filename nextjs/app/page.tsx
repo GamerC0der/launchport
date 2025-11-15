@@ -41,8 +41,10 @@ export default function Home() {
             <AllLaunchesWidget />
           </section>
 
-          <section className="mb-12">
-            <APODWidget />
+          <section className="mb-12 flex justify-center">
+            <div className="w-full max-w-3xl">
+              <APODWidget />
+            </div>
           </section>
 
           <section className="flex justify-center">
