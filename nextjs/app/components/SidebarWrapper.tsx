@@ -16,7 +16,7 @@ export default function SidebarWrapper({ children }: { children: React.ReactNode
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed top-4 left-4 z-50 p-2 bg-gray-800 text-white rounded transition-opacity duration-300 hover:opacity-80"
+          className="fixed top-4 left-4 z-50 p-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded transition-opacity duration-300 hover:opacity-80"
         >
           ☰
         </button>
