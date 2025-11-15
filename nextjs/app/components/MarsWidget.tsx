@@ -113,7 +113,7 @@ export default function MarsWidget({ onImagesLoaded }: MarsWidgetProps) {
         )}
       </div>
       <Link 
-        href="/mars"
+        href="/images"
         className="block w-full text-center py-2 px-4 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:opacity-90 transition-opacity text-sm font-medium"
       >
         View More Images

@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { HiMagnifyingGlass, HiXMark } from 'react-icons/hi2';
 
 interface Launch {
   name: string;
@@ -150,13 +151,11 @@ export default function Schedule() {
 
   return (
     <div className="p-8 overflow-y-auto h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center">Launch schedule</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Launch Schedule</h1>
       <div className="mb-6 flex flex-col items-center gap-4">
         <div className="w-full max-w-2xl relative">
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+            <HiMagnifyingGlass className="w-5 h-5" />
           </div>
           <input
             type="text"
@@ -233,9 +232,7 @@ export default function Schedule() {
                 className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                 aria-label="Close"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <HiXMark className="w-5 h-5" />
               </button>
             </div>
             

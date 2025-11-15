@@ -279,7 +279,7 @@ async function scrapeSpaceflightNow(type: string, limit: number): Promise<Launch
             if (!currentSection.name && text.match(/A SpaceX Falcon 9 rocket will launch (\d+) Starlink/i)) {
               const starlinkCountMatch = text.match(/launch (\d+) Starlink/i);
               if (starlinkCountMatch) {
-                currentSection.name = `Starlink ${starlinkCountMatch[1]}`;
+                currentSection.name = `Starlink ${starlinkCountMatch[1]}`;                                                                                    
                 currentSection.vehicle = 'Falcon 9';
                 currentSection.provider = 'SpaceX';
               }
@@ -333,7 +333,7 @@ async function scrapeSpaceflightNow(type: string, limit: number): Promise<Launch
             launch.provider = 'Unknown';
           }
         }
-        
+      
         const cleanName = launch.name.trim();
         if (!cleanName || cleanName.length < 2) {
           return null;
@@ -384,6 +384,7 @@ async function scrapeSpaceflightNow(type: string, limit: number): Promise<Launch
       console.error('Spaceflight Now scraping timeout');
     } else {
       console.error('Spaceflight Now scraping error:', error.message);
+
     }
     return [];
   }

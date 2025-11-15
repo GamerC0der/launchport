@@ -8,6 +8,7 @@ export default function Sidebar({ onClose }: { onClose: () => void }) {
   const menuItems = [
     { href: '/', label: 'Home' },
     { href: '/calendar', label: 'Schedule' },
+    { href: '/images', label: 'Images' },
   ];
   return (
     <aside className="w-64 h-screen border-r border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 p-6 overflow-y-auto">

@@ -4,7 +4,6 @@ interface MarsPhoto {
   id: string;
   img_src: string;
   earth_date: string;
-
   rover: {
     name: string;
   }
@@ -32,25 +31,28 @@ interface NASAImageItem {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const limit = parseInt(searchParams.get('limit') || '5');
+  const query = searchParams.get('query') || '';
 
   try {
     const allPhotos: MarsPhoto[] = [];
 
-    const searchQueries = [
-      'mars rover',
-      'mars curiosity',
-      'mars perseverance',
-      'mars surface',
-      'mars landscape'
-    ];
+    const searchQueries = query 
+      ? [query]
+      : [
+          'mars rover',
+          'mars curiosity',
+          'mars perseverance',
+          'mars surface',
+          'mars landscape'
+        ];
 
-    for (const query of searchQueries) {
+    for (const searchQuery of searchQueries) {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000);
 
         const response = await fetch(
-          `https://images-api.nasa.gov/search?q=${encodeURIComponent(query)}&media_type=image&page=1&page_size=50`,
+          `https://images-api.nasa.gov/search?q=${encodeURIComponent(searchQuery)}&media_type=image&page=1&page_size=50`,
           {
             headers: {
               'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
@@ -106,7 +108,7 @@ export async function GET(request: Request) {
           }
         }
       } catch (error) {
-        console.error(`Error fetching Mars images for query "${query}":`, error);
+        console.error(`Error fetching Mars images for query "${searchQuery}":`, error);
         continue;
       }
     }
