@@ -9,6 +9,7 @@ interface DraggableWidgetProps {
   children: ReactNode;
   onDrag: (id: string, x: number, y: number) => void;
   onRemove: (id: string) => void;
+  noDelete?: boolean;
 }
 
 const GRID_SIZE = 96;
@@ -17,7 +18,7 @@ function snapToGrid(value: number): number {
   return Math.round(value / GRID_SIZE) * GRID_SIZE;
 }
 
-export default function DraggableWidget({ id, x, y, children, onDrag, onRemove }: DraggableWidgetProps) {
+export default function DraggableWidget({ id, x, y, children, onDrag, onRemove, noDelete = false }: DraggableWidgetProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({ x, y });
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -96,13 +97,15 @@ export default function DraggableWidget({ id, x, y, children, onDrag, onRemove }
         >
           {children}
         </div>
-        <button
-          onClick={() => onRemove(id)}
-          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold"
-          aria-label="Remove widget"
-        >
-          ×
-        </button>
+        {!noDelete && (
+          <button
+            onClick={() => onRemove(id)}
+            className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold"
+            aria-label="Remove widget"
+          >
+            ×
+          </button>
+        )}
       </div>
     </div>
   );

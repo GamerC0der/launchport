@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 interface WidgetPickerProps {
-  onSelect: (widgetType: 'next-launch' | 'all-launches') => void;
+  onSelect: (widgetType: 'next-launch' | 'all-launches' | 'mars') => void;
   onClose: () => void;
 }
 
@@ -17,6 +17,11 @@ const widgets = [
     type: 'all-launches' as const,
     name: 'All Launches',
     description: 'Show upcoming launches list',
+  },
+  {
+    type: 'mars' as const,
+    name: 'Mars Images',
+    description: 'Show images from Mars rovers',
   },
 ];
 
