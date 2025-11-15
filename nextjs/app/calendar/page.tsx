@@ -27,15 +27,8 @@ export default function Calendar() {
   useEffect(() => {
     async function fetchLaunches() {
       try {
-        const [nextResponse, pastResponse] = await Promise.all([
-          fetch('/api/launches?type=next&limit=10'),
-          fetch('/api/launches?type=past&limit=10')
-        ]);
-        
-        const [nextData, pastData] = await Promise.all([
-          nextResponse.json(),
-          pastResponse.json()
-        ]);
+        const nextResponse = await fetch('/api/launches?type=next&limit=10');
+        const nextData = await nextResponse.json();
         
         const processLaunches = (data: ApiResponse) => {
           return data.result.map((l: any) => {
@@ -58,13 +51,24 @@ export default function Calendar() {
           });
         };
         
-        const past = processLaunches(pastData).reverse().filter(
-          (l: Launch) => !l.name.includes('EscaPADE') && !l.launch_description.includes('EscaPADE')
-        );
-        const next = processLaunches(nextData).filter(
-          (l: Launch) => !l.name.includes('EscaPADE') && !l.launch_description.includes('EscaPADE')
-        );
-        setPastLaunches(past);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        const next = processLaunches(nextData).filter((l: Launch) => {
+          if (l.name.includes('EscaPADE') || l.launch_description.includes('EscaPADE')) {
+            return false;
+          }
+          // Filter out launches before today
+          if (l.date) {
+            const launchDate = new Date(l.date);
+            launchDate.setHours(0, 0, 0, 0);
+            return launchDate >= today;
+          }
+          // If no date, include it (shouldn't happen but safe fallback)
+          return true;
+        });
+        
+        setPastLaunches([]);
         setNextLaunches(next);
       } catch (error) {
         console.error('Error fetching launches:', error);
@@ -103,10 +107,9 @@ export default function Calendar() {
   }
 
   const allProviders = Array.from(
-    new Set([
-      ...pastLaunches.map(l => l.provider),
-      ...nextLaunches.map(l => l.provider)
-    ].filter(p => p && p !== 'Unknown'))
+    new Set(
+      nextLaunches.map(l => l.provider).filter(p => p && p !== 'Unknown')
+    )
   ).sort();
 
   const toggleProvider = (provider: string) => {
@@ -144,7 +147,6 @@ export default function Calendar() {
     return filtered;
   };
 
-  const filteredPastLaunches = filterLaunches(pastLaunches);
   const filteredNextLaunches = filterLaunches(nextLaunches);
 
   return (
@@ -188,20 +190,6 @@ export default function Calendar() {
         )}
       </div>
       <div className="flex flex-col items-center gap-4">
-        {filteredPastLaunches.map((launch, idx) => (
-          <div key={`past-${idx}`} className="w-full max-w-2xl border border-gray-200 dark:border-gray-800 rounded-lg p-4">
-            <div className="font-semibold mb-3">{launch.formatted_date}</div>
-            <div onClick={() => setSelectedLaunch(launch)} className="text-sm p-4 bg-blue-100 dark:bg-blue-900 rounded cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-800 min-h-[60px]">
-              <div className="font-medium text-base mb-2">{launch.name}</div>
-              <div className="text-xs text-gray-600 dark:text-gray-400 mb-3">
-                {[launch.provider, launch.vehicle].filter(v => v && v !== 'Unknown').join(' • ')}
-              </div>
-              {launch.pad?.location?.name && launch.pad.location.name !== 'Unknown' && (
-                <div className="text-xs text-gray-500 dark:text-gray-400 mt-3">{launch.pad.location.name}</div>
-              )}
-            </div>
-          </div>
-        ))}
         {filteredNextLaunches.map((launch, idx) => (
           <div key={`next-${idx}`} className="w-full max-w-2xl border border-gray-200 dark:border-gray-800 rounded-lg p-4">
             <div className="font-semibold mb-3">{launch.formatted_date}</div>
