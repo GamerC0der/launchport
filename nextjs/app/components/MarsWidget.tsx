@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 interface MarsPhoto {
   id: string;
@@ -102,7 +103,7 @@ export default function MarsWidget({ onImagesLoaded }: MarsWidgetProps) {
           </div>
         )}
       </div>
-      <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1">
+      <div className="text-xs text-gray-600 dark:text-gray-400 space-y-1 mb-3">
         <p>{currentPhoto.rover.name} • {currentPhoto.camera.full_name}</p>
         <p>Earth Date: {currentPhoto.earth_date}</p>
         {photos.length > 1 && (
@@ -111,6 +112,12 @@ export default function MarsWidget({ onImagesLoaded }: MarsWidgetProps) {
           </p>
         )}
       </div>
+      <Link 
+        href="/mars"
+        className="block w-full text-center py-2 px-4 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg hover:opacity-90 transition-opacity text-sm font-medium"
+      >
+        View More Images
+      </Link>
     </div>
   );
 }
