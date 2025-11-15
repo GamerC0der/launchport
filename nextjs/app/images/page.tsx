@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { IoArrowBack } from 'react-icons/io5';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
+import { IoClose } from 'react-icons/io5';
 
 interface Photo {
   id: string;
@@ -37,6 +38,7 @@ export default function ImagesPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -106,6 +108,22 @@ export default function ImagesPage() {
     fetchImages();
   }, [debouncedQuery]);
 
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedPhoto(null);
+      }
+    };
+    if (selectedPhoto) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [selectedPhoto]);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <header className="bg-white dark:bg-gray-800 shadow-sm">
@@ -152,6 +170,7 @@ export default function ImagesPage() {
             {photos.map((photo) => (
               <div
                 key={photo.id}
+                onClick={() => setSelectedPhoto(photo)}
                 className="relative aspect-square rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-800 group cursor-pointer"
               >
                 <Image
@@ -171,6 +190,38 @@ export default function ImagesPage() {
           </div>
         )}
       </main>
+
+      {selectedPhoto && (
+        <div
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedPhoto(null)}
+        >
+          <div
+            className="relative max-w-7xl max-h-full w-full h-full flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedPhoto(null)}
+              className="absolute top-4 right-4 z-10 text-white hover:text-gray-300 transition-colors bg-black/50 rounded-full p-2"
+              aria-label="Close modal"
+            >
+              <IoClose className="w-6 h-6" />
+            </button>
+            <img
+              src={selectedPhoto.img_src}
+              alt={`NASA image from ${selectedPhoto.earth_date}`}
+              className="max-w-full max-h-full object-contain"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="288" height="192"%3E%3Crect fill="%23ccc" width="288" height="192"/%3E%3Ctext fill="%23999" font-family="sans-serif" font-size="14" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImage unavailable%3C/text%3E%3C/svg%3E';
+              }}
+            />
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white bg-black/50 px-4 py-2 rounded-lg text-sm">
+              Date: {selectedPhoto.earth_date}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
