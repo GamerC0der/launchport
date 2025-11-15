@@ -6,8 +6,8 @@ import { usePathname } from 'next/navigation';
 export default function Sidebar({ onClose }: { onClose: () => void }) {
   const pathname = usePathname();
   const menuItems = [
-    { href: '/', label: 'Hub' },
-    { href: '/calendar', label: 'Calendar' },
+    { href: '/', label: 'Home' },
+    { href: '/calendar', label: 'schedule' },
   ];
   return (
     <aside className="w-64 h-screen border-r border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-6 overflow-y-auto">

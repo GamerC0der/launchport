@@ -16,7 +16,7 @@ interface ApiResponse {
   result: Launch[];
 }
 
-export default function Calendar() {
+export default function Schedule() {
   const [selectedLaunch, setSelectedLaunch] = useState<Launch | null>(null);
   const [pastLaunches, setPastLaunches] = useState<Launch[]>([]);
   const [nextLaunches, setNextLaunches] = useState<Launch[]>([]);
@@ -150,7 +150,7 @@ export default function Calendar() {
 
   return (
     <div className="p-8 overflow-y-auto h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center">Launch Calendar</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Launch schedule</h1>
       <div className="mb-6 flex flex-col items-center gap-4">
         <div className="w-full max-w-2xl relative">
           <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500">
