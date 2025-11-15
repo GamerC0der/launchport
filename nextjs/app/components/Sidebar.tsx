@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { HiHome, HiCalendar, HiPhotograph } from 'react-icons/hi';
 
 export default function Sidebar({ onClose }: { onClose: () => void }) {
   const pathname = usePathname();
   const menuItems = [
-    { href: '/', label: 'Home' },
-    { href: '/calendar', label: 'Schedule' },
-    { href: '/images', label: 'Images' },
+    { href: '/', label: 'Home', icon: HiHome },
+    { href: '/calendar', label: 'Schedule', icon: HiCalendar },
+    { href: '/images', label: 'Images', icon: HiPhotograph },
   ];
   return (
     <aside className="w-64 h-screen border-r border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 p-6 overflow-y-auto">
@@ -23,12 +24,13 @@ export default function Sidebar({ onClose }: { onClose: () => void }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`block px-4 py-3 rounded-lg transition-all ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 isActive
                   ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 font-semibold'
                   : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
               }`}
             >
+              <item.icon className="w-5 h-5" />
               {item.label}
             </Link>
           );
