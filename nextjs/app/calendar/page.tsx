@@ -58,13 +58,12 @@ export default function Calendar() {
           if (l.name.includes('EscaPADE') || l.launch_description.includes('EscaPADE')) {
             return false;
           }
-          // Filter out launches before today
           if (l.date) {
-            const launchDate = new Date(l.date);
+            const timestamp = typeof l.date === 'string' ? parseInt(l.date) : l.date;
+            const launchDate = new Date(timestamp * 1000);
             launchDate.setHours(0, 0, 0, 0);
             return launchDate >= today;
           }
-          // If no date, include it (shouldn't happen but safe fallback)
           return true;
         });
         

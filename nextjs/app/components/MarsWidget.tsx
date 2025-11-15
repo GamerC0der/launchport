@@ -62,7 +62,7 @@ export default function MarsWidget({ onImagesLoaded }: MarsWidgetProps) {
   if (photos.length === 0) {
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Mars Images</h3>
+        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Images</h3>
         <div className="text-gray-500 dark:text-gray-400">No images available</div>
       </div>
     );

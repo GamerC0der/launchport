@@ -4,6 +4,7 @@ interface MarsPhoto {
   id: string;
   img_src: string;
   earth_date: string;
+
   rover: {
     name: string;
   }
@@ -22,10 +23,10 @@ interface NASAImageItem {
     media_type: string;
   }>;
   links?: Array<{
-    href: string;
+    href: string; 
     rel: string;
     render?: string;
-  }>
+  }> 
 }
 
 export async function GET(request: Request) {
