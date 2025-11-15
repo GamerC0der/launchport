@@ -10,7 +10,7 @@ export default function Sidebar({ onClose }: { onClose: () => void }) {
     { href: '/calendar', label: 'Calendar' },
   ];
   return (
-    <aside className="w-64 min-h-screen border-r border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-6">
+    <aside className="w-64 h-screen border-r border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-6 overflow-y-auto">
       <div className="mb-8 flex justify-between items-center">
         <h2 className="text-2xl font-bold">LaunchPort</h2>
         <button onClick={onClose} className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">×</button>
