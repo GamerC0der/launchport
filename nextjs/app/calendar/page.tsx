@@ -22,6 +22,7 @@ export default function Calendar() {
   const [nextLaunches, setNextLaunches] = useState<Launch[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedProviders, setSelectedProviders] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     async function fetchLaunches() {
@@ -101,16 +102,46 @@ export default function Calendar() {
     );
   }
 
+  const allProviders = Array.from(
+    new Set([
+      ...pastLaunches.map(l => l.provider),
+      ...nextLaunches.map(l => l.provider)
+    ].filter(p => p && p !== 'Unknown'))
+  ).sort();
+
+  const toggleProvider = (provider: string) => {
+    setSelectedProviders(prev => {
+      const next = new Set(prev);
+      if (next.has(provider)) {
+        next.delete(provider);
+      } else {
+        next.add(provider);
+      }
+      return next;
+    });
+  };
+
   const filterLaunches = (launches: Launch[]) => {
-    if (!searchQuery.trim()) return launches;
-    const query = searchQuery.toLowerCase();
-    return launches.filter(launch => 
-      launch.name.toLowerCase().includes(query) ||
-      launch.provider.toLowerCase().includes(query) ||
-      launch.vehicle.toLowerCase().includes(query) ||
-      launch.pad?.location?.name?.toLowerCase().includes(query) ||
-      launch.launch_description?.toLowerCase().includes(query)
-    );
+    let filtered = launches;
+
+    if (selectedProviders.size > 0) {
+      filtered = filtered.filter(launch => 
+        selectedProviders.has(launch.provider)
+      );
+    }
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(launch => 
+        launch.name.toLowerCase().includes(query) ||
+        launch.provider.toLowerCase().includes(query) ||
+        launch.vehicle.toLowerCase().includes(query) ||
+        launch.pad?.location?.name?.toLowerCase().includes(query) ||
+        launch.launch_description?.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
   };
 
   const filteredPastLaunches = filterLaunches(pastLaunches);
@@ -119,7 +150,7 @@ export default function Calendar() {
   return (
     <div className="p-8 overflow-y-auto h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center">Launch Calendar</h1>
-      <div className="mb-6 flex justify-center">
+      <div className="mb-6 flex flex-col items-center gap-4">
         <input
           type="text"
           placeholder="Search launches..."
@@ -127,6 +158,34 @@ export default function Calendar() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full max-w-2xl px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
+        {allProviders.length > 0 && (
+          <div className="w-full max-w-2xl">
+            <div className="text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Filter by Company:</div>
+            <div className="flex flex-wrap gap-2">
+              {allProviders.map(provider => (
+                <button
+                  key={provider}
+                  onClick={() => toggleProvider(provider)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    selectedProviders.has(provider)
+                      ? 'bg-blue-600 text-white hover:bg-blue-700'
+                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                  }`}
+                >
+                  {provider}
+                </button>
+              ))}
+              {selectedProviders.size > 0 && (
+                <button
+                  onClick={() => setSelectedProviders(new Set())}
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                >
+                  Clear Filters
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
       <div className="flex flex-col items-center gap-4">
         {filteredPastLaunches.map((launch, idx) => (
