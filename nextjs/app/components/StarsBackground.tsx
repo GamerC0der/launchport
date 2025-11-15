@@ -1,14 +1,31 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+
 export default function StarsBackground() {
-  const stars = Array.from({ length: 150 }, (_, i) => ({
-    id: i,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 3 + 1.5,
-    opacity: Math.random() * 0.6 + 0.4,
-    delay: Math.random() * 3,
-  }));
+  const [stars, setStars] = useState<Array<{
+    id: number;
+    x: number;
+    y: number;
+    size: number;
+    opacity: number;
+    delay: number;
+    duration: number;
+  }>>([]);
+
+  useEffect(() => {
+    setStars(
+      Array.from({ length: 150 }, (_, i) => ({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 3 + 1.5,
+        opacity: Math.random() * 0.6 + 0.4,
+        delay: Math.random() * 3,
+        duration: 2 + Math.random() * 2,
+      }))
+    );
+  }, []);
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -23,7 +40,7 @@ export default function StarsBackground() {
             height: `${star.size}px`,
             opacity: star.opacity,
             boxShadow: '0 0 4px 2px rgba(255, 255, 255, 0.8)',
-            animation: `twinkle ${2 + Math.random() * 2}s ease-in-out infinite`,
+            animation: `twinkle ${star.duration}s ease-in-out infinite`,
             animationDelay: `${star.delay}s`,
           }}
         />
