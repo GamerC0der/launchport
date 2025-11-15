@@ -4,6 +4,7 @@ import { useState } from 'react';
 import NextLaunchWidget from './components/NextLaunchWidget';
 import AllLaunchesWidget from './components/AllLaunchesWidget';
 import MarsWidget from './components/MarsWidget';
+import APODWidget from './components/APODWidget';
 import ViewAllLaunchesButton from './components/ViewAllLaunchesButton';
 import StarsBackground from './components/StarsBackground';
 
@@ -38,6 +39,10 @@ export default function Home() {
 
           <section className="mb-12">
             <AllLaunchesWidget />
+          </section>
+
+          <section className="mb-12">
+            <APODWidget />
           </section>
 
           <section className="flex justify-center">
