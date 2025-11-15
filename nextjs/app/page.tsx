@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import NextLaunchWidget from './components/NextLaunchWidget';
 import AllLaunchesWidget from './components/AllLaunchesWidget';
 import MarsWidget from './components/MarsWidget';
@@ -7,6 +8,8 @@ import ViewAllLaunchesButton from './components/ViewAllLaunchesButton';
 import StarsBackground from './components/StarsBackground';
 
 export default function Home() {
+  const [hasLoadedImages, setHasLoadedImages] = useState(false);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
       <header className="bg-white dark:bg-gray-800 shadow-sm relative z-10">
@@ -23,11 +26,13 @@ export default function Home() {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">Mars Images</h2>
+            {hasLoadedImages && (
+              <h2 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">Mars Images</h2>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <MarsWidget />
-              <MarsWidget />
-              <MarsWidget />
+              <MarsWidget onImagesLoaded={() => setHasLoadedImages(true)} />
+              <MarsWidget onImagesLoaded={() => setHasLoadedImages(true)} />
+              <MarsWidget onImagesLoaded={() => setHasLoadedImages(true)} />
             </div>
           </section>
 

@@ -14,10 +14,15 @@ interface MarsPhoto {
   };
 }
 
-export default function MarsWidget() {
+interface MarsWidgetProps {
+  onImagesLoaded?: () => void;
+}
+
+export default function MarsWidget({ onImagesLoaded }: MarsWidgetProps) {
   const [photos, setPhotos] = useState<MarsPhoto[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     async function fetchMarsPhotos() {
@@ -72,6 +77,12 @@ export default function MarsWidget() {
           src={currentPhoto.img_src}
           alt={`Mars photo from ${currentPhoto.earth_date}`}
           className="w-full h-48 object-cover rounded-lg"
+          onLoad={() => {
+            if (!imageLoaded) {
+              setImageLoaded(true);
+              onImagesLoaded?.();
+            }
+          }}
           onError={(e) => {
             (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="288" height="192"%3E%3Crect fill="%23ccc" width="288" height="192"/%3E%3Ctext fill="%23999" font-family="sans-serif" font-size="14" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImage unavailable%3C/text%3E%3C/svg%3E';
           }}
