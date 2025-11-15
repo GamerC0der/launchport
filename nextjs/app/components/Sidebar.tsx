@@ -3,18 +3,17 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }: { onClose: () => void }) {
   const pathname = usePathname();
-  
   const menuItems = [
     { href: '/', label: 'Hub' },
     { href: '/calendar', label: 'Calendar' },
   ];
-
   return (
     <aside className="w-64 min-h-screen border-r border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-6">
-      <div className="mb-8">
+      <div className="mb-8 flex justify-between items-center">
         <h2 className="text-2xl font-bold">LaunchPort</h2>
+        <button onClick={onClose} className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">×</button>
       </div>
       <nav className="space-y-1">
         {menuItems.map((item) => {
