@@ -12,14 +12,17 @@ import { getSettings } from './utils/settings';
 export default function Home() {
   const [hasLoadedImages, setHasLoadedImages] = useState(false);
   const [mobileView, setMobileView] = useState(false);
+  const [hideAPOD, setHideAPOD] = useState(false);
 
   useEffect(() => {
     const settings = getSettings();
     setMobileView(settings.mobileView);
+    setHideAPOD(settings.hideAPOD);
 
     const handleSettingsChange = () => {
       const updatedSettings = getSettings();
       setMobileView(updatedSettings.mobileView);
+      setHideAPOD(updatedSettings.hideAPOD);
     };
 
     window.addEventListener('settingsUpdated', handleSettingsChange);
@@ -58,11 +61,13 @@ export default function Home() {
             <AllLaunchesWidget />
           </section>
 
-          <section className={`${mobileView ? 'mb-8' : 'mb-12'} flex justify-center`}>
-            <div className={`w-full ${mobileView ? '' : 'max-w-3xl'}`}>
-              <APODWidget />
-            </div>
-          </section>
+          {!hideAPOD && (
+            <section className={`${mobileView ? 'mb-8' : 'mb-12'} flex justify-center`}>
+              <div className={`w-full ${mobileView ? '' : 'max-w-3xl'}`}>
+                <APODWidget />
+              </div>
+            </section>
+          )}
 
           <section className="flex justify-center">
             <ViewAllLaunchesButton />

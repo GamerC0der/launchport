@@ -5,6 +5,7 @@ export interface Settings {
   hideHomeTab: boolean;
   hideScheduleTab: boolean;
   mobileView: boolean;
+  hideAPOD: boolean;
 }
 
 const defaultSettings: Settings = {
@@ -12,6 +13,7 @@ const defaultSettings: Settings = {
   hideHomeTab: false,
   hideScheduleTab: false,
   mobileView: false,
+  hideAPOD: false,
 };
 
 export function getSettings(): Settings {

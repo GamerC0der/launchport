@@ -10,6 +10,7 @@ export default function SettingsPage() {
     hideHomeTab: false,
     hideScheduleTab: false,
     mobileView: false,
+    hideAPOD: false,
   });
 
   useEffect(() => {
@@ -131,6 +132,12 @@ export default function SettingsPage() {
               label="Mobile View"
               description="Optimize the UI for mobile devices with compact layouts and overlay sidebar"
               settingKey="mobileView"
+            />
+            <ToggleSetting
+              label="Hide Astronomy Picture of the Day"
+              description="Hide the Astronomy Picture of the Day widget from the home page"
+              settingKey="hideAPOD"
+              icon={HiPhotograph}
             />
           </div>
         </div>
