@@ -10,8 +10,7 @@ export default function SidebarWrapper({ children }: { children: React.ReactNode
   useEffect(() => {
     const settings = getSettings();
     setMobileView(settings.mobileView);
-    
-    // In mobile view, start with sidebar closed
+
     if (settings.mobileView) {
       setIsOpen(false);
     }
