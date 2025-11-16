@@ -1,15 +1,37 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { HiHome, HiCalendar, HiPhotograph, HiCog } from 'react-icons/hi';
+import { getSettings } from '../utils/settings';
 
 export default function Sidebar({ onClose }: { onClose: () => void }) {
   const pathname = usePathname();
+  const [hideImagesTab, setHideImagesTab] = useState(false);
+
+  useEffect(() => {
+    const settings = getSettings();
+    setHideImagesTab(settings.hideImagesTab);
+    
+    const handleStorageChange = () => {
+      const updatedSettings = getSettings();
+      setHideImagesTab(updatedSettings.hideImagesTab);
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('settingsUpdated', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('settingsUpdated', handleStorageChange);
+    };
+  }, []);
+
   const menuItems = [
     { href: '/', label: 'Home', icon: HiHome },
     { href: '/calendar', label: 'Schedule', icon: HiCalendar },
-    { href: '/images', label: 'Images', icon: HiPhotograph },
+    ...(hideImagesTab ? [] : [{ href: '/images', label: 'Images', icon: HiPhotograph }]),
   ];
   return (
     <aside className="w-64 h-screen border-r border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 p-6 overflow-y-auto flex flex-col">

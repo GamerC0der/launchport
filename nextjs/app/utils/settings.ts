@@ -1,0 +1,52 @@
+const SETTINGS_KEY = 'launchport_settings';
+
+export interface Settings {
+  hideImagesTab: boolean;
+}
+
+const defaultSettings: Settings = {
+  hideImagesTab: false,
+};
+
+export function getSettings(): Settings {
+  if (typeof window === 'undefined') {
+    return defaultSettings;
+  }
+  
+  try {
+    const stored = localStorage.getItem(SETTINGS_KEY);
+    if (stored) {
+      return { ...defaultSettings, ...JSON.parse(stored) };
+    }
+  } catch (error) {
+    console.error('Error loading settings:', error);
+  }
+  
+  return defaultSettings;
+}
+
+export function saveSettings(settings: Settings): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  
+  try {
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  } catch (error) {
+    console.error('Error saving settings:', error);
+  }
+}
+
+export function updateSetting<K extends keyof Settings>(
+  key: K,
+  value: Settings[K]
+): void {
+  const settings = getSettings();
+  settings[key] = value;
+  saveSettings(settings);
+  
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('settingsUpdated'));
+  }
+}
+
