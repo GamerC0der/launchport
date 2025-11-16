@@ -8,15 +8,19 @@ import { getSettings } from '../utils/settings';
 
 export default function Sidebar({ onClose }: { onClose: () => void }) {
   const pathname = usePathname();
-  const [hideImagesTab, setHideImagesTab] = useState(false);
+  const [settings, setSettings] = useState({
+    hideImagesTab: false,
+    hideHomeTab: false,
+    hideScheduleTab: false,
+  });
 
   useEffect(() => {
-    const settings = getSettings();
-    setHideImagesTab(settings.hideImagesTab);
+    const currentSettings = getSettings();
+    setSettings(currentSettings);
     
     const handleStorageChange = () => {
       const updatedSettings = getSettings();
-      setHideImagesTab(updatedSettings.hideImagesTab);
+      setSettings(updatedSettings);
     };
     
     window.addEventListener('storage', handleStorageChange);
@@ -29,9 +33,9 @@ export default function Sidebar({ onClose }: { onClose: () => void }) {
   }, []);
 
   const menuItems = [
-    { href: '/', label: 'Home', icon: HiHome },
-    { href: '/calendar', label: 'Schedule', icon: HiCalendar },
-    ...(hideImagesTab ? [] : [{ href: '/images', label: 'Images', icon: HiPhotograph }]),
+    ...(settings.hideHomeTab ? [] : [{ href: '/', label: 'Home', icon: HiHome }]),
+    ...(settings.hideScheduleTab ? [] : [{ href: '/calendar', label: 'Schedule', icon: HiCalendar }]),
+    ...(settings.hideImagesTab ? [] : [{ href: '/images', label: 'Images', icon: HiPhotograph }]),
   ];
   return (
     <aside className="w-64 h-screen border-r border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-950 p-6 overflow-y-auto flex flex-col">

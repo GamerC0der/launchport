@@ -2,10 +2,14 @@ const SETTINGS_KEY = 'launchport_settings';
 
 export interface Settings {
   hideImagesTab: boolean;
+  hideHomeTab: boolean;
+  hideScheduleTab: boolean;
 }
 
 const defaultSettings: Settings = {
   hideImagesTab: false,
+  hideHomeTab: false,
+  hideScheduleTab: false,
 };
 
 export function getSettings(): Settings {
