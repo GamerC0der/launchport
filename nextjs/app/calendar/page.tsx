@@ -25,6 +25,18 @@ interface CalendarViewProps {
 function CalendarView({ launches, onLaunchClick }: CalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  const earliestLaunchDate = launches.length > 0 ? new Date(Math.min(
+    ...launches
+      .filter(launch => launch.date)
+      .map(launch => {
+        const timestamp = typeof launch.date === 'string' ? parseInt(launch.date) : launch.date;
+        return timestamp * 1000;
+      })
+  )) : null;
+
+  const canGoPrevious = earliestLaunchDate ? currentDate.getFullYear() > earliestLaunchDate.getFullYear() ||
+    (currentDate.getFullYear() === earliestLaunchDate.getFullYear() && currentDate.getMonth() > earliestLaunchDate.getMonth()) : true;
+
   const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
   const startDate = new Date(monthStart.setDate(monthStart.getDate() - monthStart.getDay()));
@@ -58,6 +70,9 @@ function CalendarView({ launches, onLaunchClick }: CalendarViewProps) {
   };
 
   const navigateMonth = (direction: 'prev' | 'next') => {
+    if (direction === 'prev' && !canGoPrevious) {
+      return;
+    }
     setCurrentDate(prev => {
       const newDate = new Date(prev);
       if (direction === 'prev') {
@@ -74,12 +89,16 @@ function CalendarView({ launches, onLaunchClick }: CalendarViewProps) {
   return (
     <div className="w-full max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <button
-          onClick={() => navigateMonth('prev')}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-        >
-          ‹
-        </button>
+        {canGoPrevious ? (
+          <button
+            onClick={() => navigateMonth('prev')}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+          >
+            ‹
+          </button>
+        ) : (
+          <div className="w-10"></div>
+        )}
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
           {currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
         </h2>
