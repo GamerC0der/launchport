@@ -308,30 +308,35 @@ export default function Schedule() {
       <h1 className="text-3xl font-bold mb-6 text-center">Launch Schedule</h1>
 
       {!settings.hideCalendarViewSelector && (
-        <div className="mb-6 flex justify-center">
-          <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-            <button
-              onClick={() => setViewMode('list')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'list'
-                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-              }`}
-            >
-              <HiListBullet className="w-4 h-4" />
-              List
-            </button>
-            <button
-              onClick={() => setViewMode('calendar')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                viewMode === 'calendar'
-                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-              }`}
-            >
-              <HiCalendar className="w-4 h-4" />
-              Calendar
-            </button>
+        <div className="mb-8 flex justify-center">
+          <div className="relative bg-gray-100 dark:bg-gray-800 rounded-xl p-1 shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className={`absolute top-1 left-1 h-[calc(100%-8px)] bg-white dark:bg-gray-700 rounded-lg shadow-md transition-all duration-300 ease-out ${
+              viewMode === 'list' ? 'w-[calc(50%-4px)] translate-x-0' : 'w-[calc(50%-4px)] translate-x-full'
+            }`}></div>
+            <div className="relative flex">
+              <button
+                onClick={() => setViewMode('list')}
+                className={`relative z-10 flex items-center gap-3 px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                  viewMode === 'list'
+                    ? 'text-gray-900 dark:text-white'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                }`}
+              >
+                <HiListBullet className="w-5 h-5" />
+                <span className="hidden sm:inline">List</span>
+              </button>
+              <button
+                onClick={() => setViewMode('calendar')}
+                className={`relative z-10 flex items-center gap-3 px-6 py-3 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                  viewMode === 'calendar'
+                    ? 'text-gray-900 dark:text-white'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                }`}
+              >
+                <HiCalendar className="w-5 h-5" />
+                <span className="hidden sm:inline">Calendar</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
