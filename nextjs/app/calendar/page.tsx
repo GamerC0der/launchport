@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { HiMagnifyingGlass, HiXMark, HiCalendar, HiListBullet } from 'react-icons/hi2';
+import { useSettings } from '../hooks/useSettings';
 
 interface Launch {
   name: string;
@@ -169,6 +170,7 @@ function CalendarView({ launches, onLaunchClick }: CalendarViewProps) {
 }
 
 export default function Schedule() {
+  const settings = useSettings();
   const [selectedLaunch, setSelectedLaunch] = useState<Launch | null>(null);
   const [pastLaunches, setPastLaunches] = useState<Launch[]>([]);
   const [nextLaunches, setNextLaunches] = useState<Launch[]>([]);
@@ -305,32 +307,34 @@ export default function Schedule() {
     <div className="p-8 overflow-y-auto h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center">Launch Schedule</h1>
 
-      <div className="mb-6 flex justify-center">
-        <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
-          <button
-            onClick={() => setViewMode('list')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              viewMode === 'list'
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-            }`}
-          >
-            <HiListBullet className="w-4 h-4" />
-            List
-          </button>
-          <button
-            onClick={() => setViewMode('calendar')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-              viewMode === 'calendar'
-                ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-            }`}
-          >
-            <HiCalendar className="w-4 h-4" />
-            Calendar
-          </button>
+      {!settings.hideCalendarViewSelector && (
+        <div className="mb-6 flex justify-center">
+          <div className="flex bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+            <button
+              onClick={() => setViewMode('list')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'list'
+                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              <HiListBullet className="w-4 h-4" />
+              List
+            </button>
+            <button
+              onClick={() => setViewMode('calendar')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                viewMode === 'calendar'
+                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              <HiCalendar className="w-4 h-4" />
+              Calendar
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="mb-6 flex flex-col items-center gap-4">
         <div className="w-full max-w-2xl relative">

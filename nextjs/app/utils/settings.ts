@@ -6,6 +6,8 @@ export interface Settings {
   hideScheduleTab: boolean;
   mobileView: boolean;
   hideAPOD: boolean;
+  showMarsLoadingAfterDelay: boolean;
+  hideCalendarViewSelector: boolean;
 }
 
 const defaultSettings: Settings = {
@@ -14,6 +16,8 @@ const defaultSettings: Settings = {
   hideScheduleTab: false,
   mobileView: false,
   hideAPOD: false,
+  showMarsLoadingAfterDelay: false,
+  hideCalendarViewSelector: false,
 };
 
 export function getSettings(): Settings {

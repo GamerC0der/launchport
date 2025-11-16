@@ -11,6 +11,8 @@ export default function SettingsPage() {
     hideScheduleTab: false,
     mobileView: false,
     hideAPOD: false,
+    showMarsLoadingAfterDelay: false,
+    hideCalendarViewSelector: false,
   });
 
   useEffect(() => {
@@ -138,6 +140,17 @@ export default function SettingsPage() {
               description="Hide the Astronomy Picture of the Day widget from the home page"
               settingKey="hideAPOD"
               icon={HiPhotograph}
+            />
+            <ToggleSetting
+              label="Show Mars Loading After Delay"
+              description="Show loading indicator for Mars images after 5 seconds if not loaded yet"
+              settingKey="showMarsLoadingAfterDelay"
+            />
+            <ToggleSetting
+              label="Hide Calendar View Selector"
+              description="Hide the list/calendar view toggle buttons from the schedule page"
+              settingKey="hideCalendarViewSelector"
+              icon={HiCalendar}
             />
           </div>
         </div>
