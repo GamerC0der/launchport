@@ -4,12 +4,14 @@ export interface Settings {
   hideImagesTab: boolean;
   hideHomeTab: boolean;
   hideScheduleTab: boolean;
+  mobileView: boolean;
 }
 
 const defaultSettings: Settings = {
   hideImagesTab: false,
   hideHomeTab: false,
   hideScheduleTab: false,
+  mobileView: false,
 };
 
 export function getSettings(): Settings {
