@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { getSettings } from '../utils/settings';
 
 interface MarsPhoto {
   id: string;
@@ -24,6 +25,7 @@ export default function MarsWidget({ onImagesLoaded }: MarsWidgetProps) {
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
 
   useEffect(() => {
     async function fetchMarsPhotos() {
@@ -50,11 +52,35 @@ export default function MarsWidget({ onImagesLoaded }: MarsWidgetProps) {
   useEffect(() => {
     if (photos.length > 1) {
       const interval = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % photos.length);
+        setCurrentIndex((prev) => {
+          const next = (prev + 1) % photos.length;
+          setImageLoaded(false);
+          setShowLoadingIndicator(false);
+          return next;
+        });
       }, 5000);
       return () => clearInterval(interval);
     }
   }, [photos.length]);
+
+  useEffect(() => {
+    if (!loading && photos.length > 0 && !imageLoaded) {
+      const settings = getSettings();
+      if (settings.showMarsLoadingAfterDelay) {
+        setShowLoadingIndicator(false);
+        const timer = setTimeout(() => {
+          setShowLoadingIndicator(true);
+        }, 5000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [loading, photos.length, imageLoaded, currentIndex]);
+
+  useEffect(() => {
+    if (imageLoaded) {
+      setShowLoadingIndicator(false);
+    }
+  }, [imageLoaded]);
 
   if (loading) {
     return null;
@@ -74,6 +100,11 @@ export default function MarsWidget({ onImagesLoaded }: MarsWidgetProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
       <div className="relative mb-3">
+        {showLoadingIndicator && !imageLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-200 dark:bg-gray-700 rounded-lg z-10">
+            <div className="animate-pulse text-gray-500 dark:text-gray-400">Loading image...</div>
+          </div>
+        )}
         <img
           src={currentPhoto.img_src}
           alt={`Mars photo from ${currentPhoto.earth_date}`}
@@ -81,11 +112,13 @@ export default function MarsWidget({ onImagesLoaded }: MarsWidgetProps) {
           onLoad={() => {
             if (!imageLoaded) {
               setImageLoaded(true);
+              setShowLoadingIndicator(false);
               onImagesLoaded?.();
             }
           }}
           onError={(e) => {
             (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="288" height="192"%3E%3Crect fill="%23ccc" width="288" height="192"/%3E%3Ctext fill="%23999" font-family="sans-serif" font-size="14" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImage unavailable%3C/text%3E%3C/svg%3E';
+            setShowLoadingIndicator(false);
           }}
         />
         {photos.length > 1 && (

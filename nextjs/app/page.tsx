@@ -6,6 +6,7 @@ import AllLaunchesWidget from './components/AllLaunchesWidget';
 import MarsWidget from './components/MarsWidget';
 import APODWidget from './components/APODWidget';
 import ViewAllLaunchesButton from './components/ViewAllLaunchesButton';
+import ViewAllImagesButton from './components/ViewAllImagesButton';
 import StarsBackground from './components/StarsBackground';
 import { getSettings } from './utils/settings';
 
@@ -69,8 +70,9 @@ export default function Home() {
             </section>
           )}
 
-          <section className="flex justify-center">
+          <section className="flex justify-center gap-4">
             <ViewAllLaunchesButton />
+            <ViewAllImagesButton />
           </section>
         </div>
       </main>
