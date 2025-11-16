@@ -62,7 +62,7 @@ export default function SettingsPage() {
       </header>
 
       <main className={`max-w-7xl mx-auto ${settings.mobileView ? 'px-4 py-6' : 'px-4 sm:px-6 lg:px-8 py-12'}`}>
-        <div className={`bg-gray-900 rounded-lg border border-gray-800 max-w-2xl ${settings.mobileView ? 'p-4' : 'p-6'}`}>
+        <div className={`bg-gray-900 rounded-lg border border-gray-800 max-w-2xl mx-auto ${settings.mobileView ? 'p-4' : 'p-6'}`}>
           <h2 className={`font-semibold text-white mb-4 ${settings.mobileView ? 'text-lg' : 'text-xl'}`}>Sidebar Navigation</h2>
           <ToggleSetting
             label="Hide Home Tab"
@@ -81,7 +81,7 @@ export default function SettingsPage() {
           />
         </div>
 
-        <div className={`bg-gray-900 rounded-lg border border-gray-800 max-w-2xl mt-6 ${settings.mobileView ? 'p-4' : 'p-6'}`}>
+        <div className={`bg-gray-900 rounded-lg border border-gray-800 max-w-2xl mx-auto mt-6 ${settings.mobileView ? 'p-4' : 'p-6'}`}>
           <h2 className={`font-semibold text-white mb-4 ${settings.mobileView ? 'text-lg' : 'text-xl'}`}>Display</h2>
           <ToggleSetting
             label="Mobile View"
