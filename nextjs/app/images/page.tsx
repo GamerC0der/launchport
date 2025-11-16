@@ -157,15 +157,45 @@ export default function ImagesPage() {
             />
           </div>
           <div className="flex-shrink-0">
-            <select
-              value={numResults}
-              onChange={(e) => setNumResults(Number(e.target.value))}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value={4}>4 results</option>
-              <option value={10}>10 results</option>
-              <option value={25}>25 results</option>
-            </select>
+            <div className="relative bg-gray-100 dark:bg-gray-800 rounded-xl p-1 shadow-lg border border-gray-200 dark:border-gray-700">
+              <div className={`absolute top-1 h-[calc(100%-8px)] bg-white dark:bg-gray-700 rounded-lg shadow-md transition-all duration-300 ease-out ${
+                numResults === 4 ? 'left-1 w-[calc(33.33%-4px)]' :
+                numResults === 10 ? 'left-[calc(33.33%+2px)] w-[calc(33.33%-4px)]' :
+                'left-[calc(66.66%+2px)] w-[calc(33.33%-4px)]'
+              }`}></div>
+              <div className="relative flex">
+                <button
+                  onClick={() => setNumResults(4)}
+                  className={`relative z-10 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                    numResults === 4
+                      ? 'text-gray-900 dark:text-white'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  4
+                </button>
+                <button
+                  onClick={() => setNumResults(10)}
+                  className={`relative z-10 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                    numResults === 10
+                      ? 'text-gray-900 dark:text-white'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  10
+                </button>
+                <button
+                  onClick={() => setNumResults(25)}
+                  className={`relative z-10 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                    numResults === 25
+                      ? 'text-gray-900 dark:text-white'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  25
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
