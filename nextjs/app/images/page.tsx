@@ -39,6 +39,7 @@ export default function ImagesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
+  const [numResults, setNumResults] = useState(25);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -97,7 +98,7 @@ export default function ImagesPage() {
           }
         }
 
-        setPhotos(allPhotos.slice(0, 50));
+        setPhotos(allPhotos.slice(0, numResults));
       } catch (error) {
         console.error('Error fetching images:', error);
         setPhotos([]);
@@ -106,7 +107,7 @@ export default function ImagesPage() {
       }
     }
     fetchImages();
-  }, [debouncedQuery]);
+  }, [debouncedQuery, numResults]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -142,22 +143,35 @@ export default function ImagesPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-6 max-w-xl mx-auto relative">
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500">
-            <HiMagnifyingGlass className="w-5 h-5" />
+        <div className="mb-6 flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+          <div className="flex-1 relative">
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500">
+              <HiMagnifyingGlass className="w-5 h-5" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search images..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
-          <input
-            type="text"
-            placeholder="Search images..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="flex-shrink-0">
+            <select
+              value={numResults}
+              onChange={(e) => setNumResults(Number(e.target.value))}
+              className="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value={4}>4 results</option>
+              <option value={10}>10 results</option>
+              <option value={25}>25 results</option>
+            </select>
+          </div>
         </div>
 
         {loading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {Array.from({ length: 20 }).map((_, i) => (
+            {Array.from({ length: numResults }).map((_, i) => (
               <SkeletonLoader key={i} />
             ))}
           </div>
