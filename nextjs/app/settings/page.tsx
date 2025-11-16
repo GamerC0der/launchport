@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { HiHome, HiCalendar, HiPhotograph, HiDeviceMobile, HiViewGrid, HiCog } from 'react-icons/hi';
-import { getSettings, updateSetting } from '../utils/settings';
+import { HiHome, HiCalendar, HiPhotograph, HiDeviceMobile, HiViewGrid, HiCog, HiRefresh } from 'react-icons/hi';
+import { getSettings, updateSetting, resetSettings } from '../utils/settings';
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState({
@@ -31,6 +31,14 @@ export default function SettingsPage() {
     const newValue = !settings[key];
     setSettings({ ...settings, [key]: newValue });
     updateSetting(key, newValue);
+  };
+
+  const handleReset = () => {
+    if (confirm('Are you sure you want to reset all settings to their default values?')) {
+      resetSettings();
+      const defaultSettings = getSettings();
+      setSettings(defaultSettings);
+    }
   };
 
   const ToggleSetting = ({ 
@@ -125,6 +133,23 @@ export default function SettingsPage() {
               settingKey="mobileView"
             />
           </div>
+        </div>
+
+        <div className={`bg-white dark:bg-gray-800 rounded-xl border border-red-200 dark:border-red-800/50 shadow-sm overflow-hidden mt-6 ${settings.mobileView ? 'p-4' : 'p-6'}`}>
+          <div className="flex items-center gap-2 mb-4">
+            <HiRefresh className={`text-red-600 dark:text-red-400 ${settings.mobileView ? 'w-5 h-5' : 'w-6 h-6'}`} />
+            <h2 className={`font-bold text-gray-900 dark:text-white ${settings.mobileView ? 'text-lg' : 'text-xl'}`}>Reset Settings</h2>
+          </div>
+          <p className={`text-gray-600 dark:text-gray-400 mb-4 ${settings.mobileView ? 'text-sm' : 'text-base'}`}>
+            Reset all settings to their default values. This action cannot be undone.
+          </p>
+          <button
+            onClick={handleReset}
+            className={`inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white font-semibold rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-800 ${settings.mobileView ? 'text-sm' : 'text-base'}`}
+          >
+            <HiRefresh className={settings.mobileView ? 'w-4 h-4' : 'w-5 h-5'} />
+            Reset All Settings
+          </button>
         </div>
       </main>
     </div>

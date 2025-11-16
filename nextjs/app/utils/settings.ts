@@ -56,3 +56,18 @@ export function updateSetting<K extends keyof Settings>(
   }
 }
 
+export function resetSettings(): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  
+  try {
+    localStorage.removeItem(SETTINGS_KEY);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('settingsUpdated'));
+    }
+  } catch (error) {
+    console.error('Error resetting settings:', error);
+  }
+}
+
